@@ -3,16 +3,30 @@ import Loader from "@/loading/page";
 import { BooksCount } from "@/Type";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import Grafika from "../grafika/page";
-import BookStok from "./bookstor/page";
 import Top100Book from "./top100book/page";
+import TopLibrarians from "./top30/page";
+import BookStok from "../bookstor/page";
+import Grafika from "../grafika/page";
 
 function Statistika() {
-  const [bookStatistika, setBookStatistika] = useState<BooksCount>();
-
+  
+  const [bookStatistika, setBookStatistika] = useState<BooksCount | null>();
+  
+  const graphData = bookStatistika?.one_month_leased_rents_by_day?.map(
+    (item) => ({
+      date: item.day.split("T")[0].slice(-5),
+      borrowed: parseInt(item.count.toString()),
+      returned: parseInt(
+        bookStatistika.one_month_returned_rents_by_day
+          .find((r) => r.day === item.day)
+          ?.count.toString() || "0"
+      ),
+    })
+  );
   useEffect(() => {
     axios.get(`https://library.softly.uz/api/app/stats`).then((res) => {
       setBookStatistika(res.data);
+      console.log(res.data);
     });
   }, []);
 
@@ -23,86 +37,100 @@ function Statistika() {
       </div>
     );
   }
+  
 
   return (
-    <div className="container mx-auto px-6 md:px-20 lg:px-32 py-10">
+    <div className="container mx-auto px-6 md:px-16 lg:px-24 py-10">
       <div className="text-center mb-10">
-        <h1 className="text-4xl font-bold text-white">
-          📊 Kutubxona statistikasi
-        </h1>
-        <p className="text-lg text-white mt-3">
-          20.04.2021 sanadan boshlab hozirgi kungacha
-        </p>
+        <h1 className="text-4xl font-bold">📊 Kutubxona statistikasi</h1>
+        <p className="text-lg  mt-2">20.04.2021 sanadan hozirgacha</p>
       </div>
 
-      <div className=" rounded-lg p-6 md:p-10">
-        <h2 className="text-2xl font-semibold text-white mb-4">
-          📚 Umumiy statistika
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-lg text-white">
-          <p>
+      {/* Umumiy statistika */}
+      <div>
+        <h2 className="text-3xl font-semibold  mb-6">📚 Umumiy statistika</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xl font-semibold ">
+          <p className="border-b border-gray-300 pb-2">
             📚 Barcha kitoblar:{" "}
-            <span className="font-bold">{bookStatistika?.books_count}</span> ta
+            <span className="text-blue-600 font-extrabold">
+              {bookStatistika?.books_count}
+            </span>{" "}
+            ta
           </p>
-          <p>
+          <p className="border-b border-gray-300 pb-2">
             🧑‍🚀 Kitobxonlar:{" "}
-            <span className="font-bold">
+            <span className="text-blue-600 font-extrabold">
               {bookStatistika?.librarians_count}
             </span>{" "}
             ta
           </p>
-          <p>
+          <p className="border-b border-gray-300 pb-2">
             📖 Umumiy ijaralar soni:{" "}
-            <span className="font-bold">{bookStatistika?.rents_count}</span> ta
+            <span className="text-blue-600 font-extrabold">
+              {bookStatistika?.rents_count}
+            </span>{" "}
+            ta
           </p>
-          <p>
+          <p className="border-b border-gray-300 pb-2">
             👨‍🏫 Erkaklar:{" "}
-            <span className="font-bold">{bookStatistika?.gender.male}</span> |{" "}
-            🧑‍🏫 Ayollar:{" "}
-            <span className="font-bold">{bookStatistika?.gender.female}</span>
+            <span className="text-blue-600 font-extrabold">
+              {bookStatistika?.gender.male}
+            </span>{" "}
+            | 🧑‍🏫 Ayollar:
+            <span className="text-pink-600 font-extrabold">
+              {bookStatistika?.gender.female}
+            </span>
           </p>
-          <p>
-            📖 Hozirda o'qilayotgan kitoblar:{" "}
-            <span className="font-bold">
+          <p className="border-b border-gray-300 pb-2">
+            {"📖 Hozirda o'qilayotgan kitoblar:"}
+            <span className="text-blue-600 font-extrabold">
               {bookStatistika?.reading_books_count}
             </span>{" "}
             ta
           </p>
-          <p>
+          <p className="border-b border-gray-300 pb-2">
             ⚠️ Kechiktirilgan kitoblar:{" "}
-            <span className="font-bold">{bookStatistika?.expired_leases}</span>{" "}
+            <span className="text-red-600 font-extrabold">
+              {bookStatistika?.expired_leases}
+            </span>{" "}
             ta
           </p>
         </div>
+      </div>
 
-        <h2 className="text-2xl font-semibold text-w mt-8 mb-4">
-          📊 So‘nggi davr statistikasi
+      <div>
+        <h2 className="text-3xl font-semibold  mt-9 mb-6">
+          {"  📊 So‘nggi davr statistikasi"}
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-lg text-gray-700">
-          <p>
-            📖 Kunlik o‘rtacha ijaralar:{" "}
-            <span className="font-bold">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xl font-semibold ">
+          <p className="border-b border-gray-300 pb-2">
+            {"📖 Kunlik o‘rtacha ijaralar:"}
+            <span className="text-blue-600 font-extrabold">
+              {" "}
               {bookStatistika?.dayly_leasing_books_avarage_count_of_last_month}
             </span>{" "}
             ta
           </p>
-          <p>
-            📖 Oxirgi oyda ijaraga berilgan kitoblar:{" "}
-            <span className="font-bold">
+          <p className="border-b border-gray-300 pb-2">
+            📖 Oxirgi oyda ijaraga berilgan kitoblar:
+            <span className="text-blue-600 font-extrabold">
+              {" "}
               {bookStatistika?.leased_books_count_of_last_month}
             </span>{" "}
             ta
           </p>
-          <p>
-            📖 Oxirgi haftada berilgan kitoblar:{" "}
-            <span className="font-bold">
+          <p className="border-b border-gray-300 pb-2">
+            📖 Oxirgi haftada berilgan kitoblar:
+            <span className="text-blue-600 font-extrabold">
+              {" "}
               {bookStatistika?.leased_books_count_of_last_week}
             </span>{" "}
             ta
           </p>
-          <p>
-            📖 Oxirgi 24 soat ichida berilgan kitoblar:{" "}
-            <span className="font-bold">
+          <p className="border-b border-gray-300 pb-2">
+            📖 Oxirgi 24 soat ichida berilgan kitoblar:
+            <span className="text-blue-600 font-extrabold">
+              {" "}
               {bookStatistika?.leased_books_count_of_last_24_hours}
             </span>{" "}
             ta
@@ -110,15 +138,23 @@ function Statistika() {
         </div>
       </div>
 
+      {/* Grafika, Top Kitoblar */}
       <div className="mt-10">
         <h2 className="text-2xl font-semibold  mb-4">
-          📈 Oxirgi oy bo‘yicha grafigi
+          {" 📈 Oxirgi oy bo‘yicha grafigi"}
         </h2>
-        <div className="  rounded-lg p-6">
-          <Grafika />
+        <div className="">
+          <Grafika data={graphData} />
         </div>
-        <BookStok />
-        <Top100Book />
+        <div className="mt-6">
+          <BookStok />
+        </div>
+        <div className="mt-6">
+          <Top100Book />
+        </div>
+        <div className=" mt-6">
+          <TopLibrarians />
+        </div>
       </div>
     </div>
   );

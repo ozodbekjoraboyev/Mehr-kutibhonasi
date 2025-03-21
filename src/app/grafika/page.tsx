@@ -1,93 +1,60 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import axios from "axios";
+import React from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   LineChart,
   Line,
-  CartesianGrid,
   XAxis,
   YAxis,
   Tooltip,
-  ReferenceArea,
   ResponsiveContainer,
+  Legend,
 } from "recharts";
-import { GrafikaType } from "@/Type";
 
+interface ChartData {
+  date: string;
+  borrowed: number;
+  returned: number;
+}
 
+interface Grafika {
+  data: ChartData[];
+}
 
-const Grafika = () => {
-  const [grafika, setGrafika] = useState<{ name: number; cost: number }[]>([]);
-  const [refAreaLeft, setRefAreaLeft] = useState<number | null>(null);
-  const [refAreaRight, setRefAreaRight] = useState<number | null>(null);
-
-  // API dan ma’lumot olish
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await axios.get(`https://library.softly.uz/api/app/stats`);
-        const data = res.data.one_month_returned_rents_by_day.map(
-          (item: GrafikaType, index: number) => ({
-            name: index + 1,
-            cost: Number(item.count),
-          })
-        );
-        setGrafika(data);
-      } catch (error) {
-        console.error("API dan ma'lumot olishda xatolik:", error);
-      }
-    };
-
-    fetchData();
-  }, []);
-
+export default function BorrowingChart({ data }: Grafika) {
   return (
-    <div className="flex flex-col items-center w-full max-w-3xl px-4  ">
-      <button
-        className="mb-4 px-4 py-2 bg-blue-500 text-white rounded-md"
-        onClick={() => {
-          setRefAreaLeft(null);
-          setRefAreaRight(null);
-        }}
-      >
-        Zoom Out
-      </button>
-
-      <div className="w-full h-80 sm:h-96 md:h-[500px]">
-        <ResponsiveContainer width="100%" height="100%">
-          <LineChart
-            data={grafika}
-            onMouseDown={(e) => setRefAreaLeft(e?.activeLabel ?? null)}
-            onMouseMove={(e) =>
-              refAreaLeft !== null && setRefAreaRight(e?.activeLabel ?? null)
-            }
-            onMouseUp={() => {
-              setRefAreaLeft(null);
-              setRefAreaRight(null);
-            }}
-          >
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip />
+    <Card>
+      <CardHeader className="pb-2">
+        <CardTitle className="text-lg sm:text-xl">📈 Kitob Olish/Qaytarish</CardTitle>
+      </CardHeader>
+      <CardContent className="w-full">
+        <ResponsiveContainer width="100%" height={250}>
+          <LineChart data={data}>
+            <XAxis dataKey="date" fontSize={12} tickLine={false} />
+            <YAxis fontSize={12} tickLine={false} />
+            <Tooltip 
+              contentStyle={{ borderRadius: "8px" }} 
+              cursor={{ strokeDasharray: "3 3" }} 
+            />
+            <Legend wrapperStyle={{ fontSize: "14px" }} />
             <Line
               type="monotone"
-              dataKey="cost"
-              stroke="#8884d8"
-              animationDuration={300}
+              dataKey="borrowed"
+              stroke="#4F46E5"
+              strokeWidth={2}
+              name="Olingan"
             />
-            {refAreaLeft !== null && refAreaRight !== null && (
-              <ReferenceArea
-                x1={refAreaLeft}
-                x2={refAreaRight}
-                strokeOpacity={0.3}
-              />
-            )}
+            <Line
+              type="monotone"
+              dataKey="returned"
+              stroke="#22C55E"
+              strokeWidth={2}
+              name="Qaytarilgan"
+            />
           </LineChart>
         </ResponsiveContainer>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
-};
-
-export default Grafika;
+}

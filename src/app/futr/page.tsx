@@ -15,7 +15,7 @@ function Futer() {
 
         <a
           className="flex items-center gap-3"
-          href="https://t.me/YOUR_TELEGRAM_LINK"
+          href="https://t.me/mehr_kutubxonasi"
           target="_blank"
           rel="noopener noreferrer"
         >

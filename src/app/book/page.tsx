@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export default function Book({ item }: any) {
   return (
-    <div className="bg-white shadow-md rounded-xl h-full overflow-hidden p-5 transition hover:shadow-xl flex flex-col">
+    <div className="bg-white  shadow-md rounded-xl h-full overflow-hidden p-5 transition hover:shadow-xl flex flex-col">
       <Link href={"/moddal"}>
         <div className="w-full h-[220px] flex justify-center items-center">
           <Image
@@ -35,7 +35,7 @@ export default function Book({ item }: any) {
             : "bg-blue-700 font-bold hover:bg-blue-800"
         }`}
       >
-        {item.stocks.busy ? "Band" : "Bo'sh"}
+        {item.stocks.busy ? "Band" : `Bosh`}
       </button>
     </div>
   );

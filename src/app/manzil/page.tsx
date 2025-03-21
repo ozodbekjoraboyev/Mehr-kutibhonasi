@@ -10,7 +10,7 @@ const Manzil = () => {
   }, []);
 
   return (
-    <div className=" p-12">
+    <div className=" p-12 mt-32">
       <blockquote
         className="telegram-post"
         data-telegram-post="mehr_kutubxonasi/1559"

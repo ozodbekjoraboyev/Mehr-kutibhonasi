@@ -33,6 +33,15 @@ export type BooksCount = {
   leased_books_count_of_last_month: string;
   leased_books_count_of_last_week: string;
   leased_books_count_of_last_24_hours: string;
+
+  one_month_leased_rents_by_day: {
+    count: string;
+    day: string;
+  }[];
+  one_month_returned_rents_by_day: {
+    count: string;
+    day: string;
+  }[];
 };
 
 export type GrafikaType = {
@@ -51,3 +60,10 @@ export type topBooksType = {
   id: number;
   name: string;
 };
+
+export type TopLibrariansType = {
+  count: string;
+  lastName: string;
+  user_id: number;
+};
+

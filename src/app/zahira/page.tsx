@@ -23,8 +23,8 @@ function Zahira() {
   }
   
   return (
-    <div className="container mx-auto px-4 sm:px-8 md:px-16 lg:px-32">
-      <p className="font-bold text-2xl text-center p-2 pb-4 ">
+    <div className="container mx-auto mt-22 px-4 sm:px-8 md:px-16 lg:px-32 ">
+      <p className="font-bold text-2xl text-center p-2 pb-4 mt- ">
         📚 Zarur (yetishmayotgan) kitoblar
       </p>
 
@@ -33,11 +33,11 @@ function Zahira() {
           <input
             value={searchInput}
             type="text"
-           className="w-full outline-none bg-transparent text-lg sm:text-xl text-white dark:text-black"
+           className="w-full outline-none bg-transparent text-lg sm:text-xl "
             placeholder="Type something..."
             onChange={(e) => setSearchInput(e.target.value)}
           />
-          <button className="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-gray-600 font-medium rounded-lg text-sm px-4 py-2">
+          <button className="text-white  bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-gray-600 font-medium rounded-lg text-sm px-4 py-2">
             Search
           </button>
         </div>

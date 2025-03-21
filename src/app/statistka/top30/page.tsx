@@ -1,24 +1,25 @@
+
 "use client";
-import { TopBooksLastWeekType, topBooksType } from "@/Type";
+import { TopLibrariansType } from "@/Type";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
-export default function TopBook() {
-  const [bookStok, setBookStok] = useState<topBooksType[]>();
+export default function TopLibrarians() {
+  const [bookStok, setBookStok] = useState<TopLibrariansType[]>();
   const [searchInput, setSearchInput] = useState("");
   useEffect(() => {
     axios.get(`https://library.softly.uz/api/app/stats`).then((res) => {
-      setBookStok(res.data.top_books);
+      setBookStok(res.data.top_librarians);
     });
   }, []);
 
   const searchInputFilter = bookStok?.filter((item) => {
-    return item.name.toUpperCase().includes(searchInput.toUpperCase());
+    return item.lastName?.toUpperCase().includes(searchInput.toUpperCase());
   });
   return (
     <div className="container mx-auto px-6 py-10">
       <h2 className="text-3xl font-bold  text-center mb-6">
-      {"  📚 Oxirgi haftada eng ko‘p o‘qilgan kitoblar"}
+      🧑‍🚀 Top 30 kitobxon
       </h2>
 
       <div className="    ">
@@ -41,8 +42,8 @@ export default function TopBook() {
           >
             <span className="text-xl font-bold ">{index + 1}.</span>
             <div>
-              <p className="text-lg font-semibold ">{item.name}</p>
-              <p className="text-sm">{item.count} {"marta o'qilgan"}</p>
+              <p className="text-lg font-semibold ">{item.lastName}</p>
+              <p className="text-sm">{item.count} marta o‘qilgan</p>
             </div>
           </div>
         ))}
